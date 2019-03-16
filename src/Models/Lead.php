@@ -33,7 +33,8 @@ class Lead extends AbstractModel
         'last_modified',
         'status_id',
         'pipeline_id',
-        'price',
+        'sale',
+        'contacts_id',
         'responsible_user_id',
         'created_user_id',
         'request_id',
@@ -57,7 +58,7 @@ class Lead extends AbstractModel
      */
     public function apiList($parameters, $modified = null)
     {
-        $response = $this->getRequest('/private/api/v2/json/leads/list', $parameters, $modified);
+        $response = $this->getRequest('/api/v2/leads', $parameters, $modified);
 
         return isset($response['leads']) ? $response['leads'] : [];
     }
@@ -78,16 +79,14 @@ class Lead extends AbstractModel
         }
 
         $parameters = [
-            'leads' => [
-                'add' => [],
-            ],
+            'add' => [],
         ];
 
         foreach ($leads AS $lead) {
-            $parameters['leads']['add'][] = $lead->getValues();
+            $parameters['add'][] = $lead->getValues();
         }
 
-        $response = $this->postRequest('/private/api/v2/json/leads/set', $parameters);
+        $response = $this->postRequest('/api/v2/leads', $parameters);
 
         if (isset($response['leads']['add'])) {
             $result = array_map(function($item) {
@@ -116,18 +115,16 @@ class Lead extends AbstractModel
         $this->checkId($id);
 
         $parameters = [
-            'leads' => [
-                'update' => [],
-            ],
+            'update' => [],
         ];
 
         $lead = $this->getValues();
         $lead['id'] = $id;
         $lead['last_modified'] = strtotime($modified);
 
-        $parameters['leads']['update'][] = $lead;
+        $parameters['update'][] = $lead;
 
-        $response = $this->postRequest('/private/api/v2/json/leads/set', $parameters);
+        $response = $this->postRequest('/api/v2/leads', $parameters);
 
         return empty($response['leads']['update']['errors']);
     }
