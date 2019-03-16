@@ -260,6 +260,7 @@ class Request
     protected function parseResponse($response, $info)
     {
         $result = json_decode($response, true);
+        
 
         if (floor($info['http_code'] / 100) >= 3) {
             if (isset($result['response']['error_code']) && $result['response']['error_code'] > 0) {
