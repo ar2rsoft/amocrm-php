@@ -56,7 +56,7 @@ class Contact extends AbstractModel
      */
     public function apiList($parameters, $modified = null)
     {
-        $response = $this->getRequest('/private/api/v2/json/contacts/list', $parameters, $modified);
+        $response = $this->getRequest('/api/v2/contacts', $parameters, $modified);
 
         return isset($response['contacts']) ? $response['contacts'] : [];
     }
@@ -77,16 +77,14 @@ class Contact extends AbstractModel
         }
 
         $parameters = [
-            'contacts' => [
-                'add' => [],
-            ],
+            'add' => [],
         ];
 
         foreach ($contacts AS $contact) {
-            $parameters['contacts']['add'][] = $contact->getValues();
+            $parameters['add'][] = $contact->getValues();
         }
 
-        $response = $this->postRequest('/private/api/v2/json/contacts/set', $parameters);
+        $response = $this->postRequest('/api/v2/contacts', $parameters);
 
         if (isset($response['contacts']['add'])) {
             $result = array_map(function ($item) {
@@ -115,18 +113,16 @@ class Contact extends AbstractModel
         $this->checkId($id);
 
         $parameters = [
-            'contacts' => [
-                'update' => [],
-            ],
+            'update' => [],
         ];
 
         $contact = $this->getValues();
         $contact['id'] = $id;
         $contact['last_modified'] = strtotime($modified);
 
-        $parameters['contacts']['update'][] = $contact;
+        $parameters['update'][] = $contact;
 
-        $response = $this->postRequest('/private/api/v2/json/contacts/set', $parameters);
+        $response = $this->postRequest('/api/v2/contacts', $parameters);
 
         return empty($response['contacts']['update']['errors']);
     }
@@ -143,7 +139,7 @@ class Contact extends AbstractModel
      */
     public function apiLinks($parameters, $modified = null)
     {
-        $response = $this->getRequest('/private/api/v2/json/contacts/links', $parameters, $modified);
+        $response = $this->getRequest('/api/v2/contacts', $parameters, $modified);
 
         return isset($response['links']) ? $response['links'] : [];
     }
