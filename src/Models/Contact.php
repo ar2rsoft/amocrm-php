@@ -40,6 +40,8 @@ class Contact extends AbstractModel
         'linked_company_id',
         'tags',
         'notes',
+        'email',
+        'phone',
         'modified_user_id',
     ];
 
@@ -58,7 +60,7 @@ class Contact extends AbstractModel
     {
         $response = $this->getRequest('/api/v2/contacts', $parameters, $modified);
 
-        return isset($response['contacts']) ? $response['contacts'] : [];
+        return isset($response['items']) ? $response['items'] : [];
     }
 
     /**

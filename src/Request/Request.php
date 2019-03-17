@@ -260,7 +260,7 @@ class Request
     protected function parseResponse($response, $info)
     {
         $result = json_decode($response, true);
-        
+
 
         if (floor($info['http_code'] / 100) >= 3) {
             if (isset($result['response']['error_code']) && $result['response']['error_code'] > 0) {
@@ -277,11 +277,11 @@ class Request
             } else {
                 throw new Exception('Invalid response body.', $code);
             }
-        } elseif (!isset($result['response'])) {
+        } elseif (!isset($result['response']) and !isset($result['_embedded'])) {
             return false;
         }
 
-        return $result['response'];
+        return isset($result['response']) ? $result['response'] : (isset($result['_embedded']) ? $result['_embedded'] : false);
     }
 
     /**

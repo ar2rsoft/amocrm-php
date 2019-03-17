@@ -60,7 +60,7 @@ class Lead extends AbstractModel
     {
         $response = $this->getRequest('/api/v2/leads', $parameters, $modified);
 
-        return isset($response['leads']) ? $response['leads'] : [];
+        return isset($response['items']) ? $response['items'] : [];
     }
 
     /**
@@ -88,10 +88,10 @@ class Lead extends AbstractModel
 
         $response = $this->postRequest('/api/v2/leads', $parameters);
 
-        if (isset($response['leads']['add'])) {
+        if (isset($response['items'])) {
             $result = array_map(function($item) {
                 return $item['id'];
-            }, $response['leads']['add']);
+            }, $response['items']);
         } else {
             return [];
         }
