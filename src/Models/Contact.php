@@ -88,10 +88,10 @@ class Contact extends AbstractModel
 
         $response = $this->postRequest('/api/v2/contacts', $parameters);
 
-        if (isset($response['contacts']['add'])) {
-            $result = array_map(function ($item) {
+        if (isset($response['items'])) {
+            $result = array_map(function($item) {
                 return $item['id'];
-            }, $response['contacts']['add']);
+            }, $response['items']);
         } else {
             return [];
         }
